@@ -4,14 +4,15 @@ class Zwasm < Formula
   license "Apache-2.0"
 
   on_macos do
-    # No x86_64-macos binary is published, so fail on Intel with a clear
-    # message instead of an unresolved url.
+    # Only an arm64 binary is published. The url stays at this level rather
+    # than nested in an `on_arm` block so the formula still loads on Intel,
+    # where `depends_on` then rejects it by name. Nested, Intel macOS reaches
+    # `determine_active_spec` with no url at all and dies with "formula
+    # requires at least a URL" plus a backtrace telling the user to file a bug.
     depends_on arch: :arm64
 
-    on_arm do
-      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
-      sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
-    end
+    url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
+    sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
   end
 
   on_linux do
