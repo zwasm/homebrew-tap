@@ -4,15 +4,26 @@ class Zwasm < Formula
   license "Apache-2.0"
 
   on_macos do
-    # Only an arm64 binary is published. The url stays at this level rather
-    # than nested in an `on_arm` block so the formula still loads on Intel,
-    # where `depends_on` then rejects it by name. Nested, Intel macOS reaches
-    # `determine_active_spec` with no url at all and dies with "formula
-    # requires at least a URL" plus a backtrace telling the user to file a bug.
+    # Only an arm64 binary is published, and this rejects Intel by name.
     depends_on arch: :arm64
 
-    url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
-    sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
+    on_arm do
+      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
+      sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
+    end
+
+    # Deliberate duplicate, and not a candidate for cleanup. Homebrew resolves
+    # a spec while *loading* the formula, well before `depends_on` runs, so an
+    # Intel Mac with no url here dies with "formula requires at least a URL", a
+    # backtrace, and an invitation to report a Homebrew bug. Giving Intel a url
+    # lets the formula load so the requirement above can produce "Required:
+    # arm64 architecture" instead. It is never fetched. Hoisting the url up to
+    # `on_macos` to avoid repeating it fails `brew style`:
+    # FormulaAudit/ComponentsOrder allows url only inside on_arm / on_intel.
+    on_intel do
+      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
+      sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
+    end
   end
 
   on_linux do
