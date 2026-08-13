@@ -30,11 +30,21 @@ jobs:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@962acc985cf741e4f7a112a3cfa6194386b63edf
 
+      # `brew install <path>` is rejected ("Homebrew requires formulae to be in
+      # a tap"), so graft this checkout in as the tap. That also means the
+      # install below is the exact command a user runs.
+      - name: Tap this checkout
+        run: |
+          tap_dir="$(brew --repository)/Library/Taps/zwasm/homebrew-tap"
+          mkdir -p "$(dirname "$tap_dir")"
+          ln -s "$GITHUB_WORKSPACE" "$tap_dir"
+          brew tap-info zwasm/tap
+
       - name: Lint the formula
-        run: brew style ./Formula/zwasm.rb
+        run: brew style zwasm/tap
 
       - name: Install
-        run: brew install --formula --verbose ./Formula/zwasm.rb
+        run: brew install --verbose zwasm/tap/zwasm
 
       - name: Run it
         run: zwasm --version
