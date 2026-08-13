@@ -1,0 +1,53 @@
+# Install the formula for real on every change. The formula is hand-edited on
+# each zwasm release (three urls, three sha256 values), and a wrong checksum or
+# a renamed asset is invisible until a user hits it.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install:
+    name: install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@962acc985cf741e4f7a112a3cfa6194386b63edf
+
+      - name: Lint the formula
+        run: brew style ./Formula/zwasm.rb
+
+      - name: Install
+        run: brew install --formula --verbose ./Formula/zwasm.rb
+
+      - name: Run it
+        run: zwasm --version
+
+  ci-required:
+    name: ci-required
+    needs: [install]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gate
+        run: |
+          if [ "${{ needs.install.result }}" != "success" ]; then
+            echo "install did not succeed: ${{ needs.install.result }}"
+            exit 1
+          fi
