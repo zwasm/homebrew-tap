@@ -8,8 +8,8 @@ class Zwasm < Formula
     depends_on arch: :arm64
 
     on_arm do
-      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
-      sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
+      url "https://github.com/zwasm/zwasm/releases/download/v2.6.0/zwasm-macos-aarch64.tar.gz"
+      sha256 "0cdb3af52f94dd000b154b7ce254f476f9810e2a435c95150bacd8051b5727be"
     end
 
     # Deliberate duplicate, and not a candidate for cleanup. Homebrew resolves
@@ -21,19 +21,19 @@ class Zwasm < Formula
     # `on_macos` to avoid repeating it fails `brew style`:
     # FormulaAudit/ComponentsOrder allows url only inside on_arm / on_intel.
     on_intel do
-      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-macos-aarch64.tar.gz"
-      sha256 "22c7ba960d8d5b6a10ef978a3d6766d34bd30b726678880e4de7edf8674f9310"
+      url "https://github.com/zwasm/zwasm/releases/download/v2.6.0/zwasm-macos-aarch64.tar.gz"
+      sha256 "0cdb3af52f94dd000b154b7ce254f476f9810e2a435c95150bacd8051b5727be"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-linux-x86_64.tar.gz"
-      sha256 "fa7bc6a35ead2919385763ad0afea928f5ea7770764b648db9bc73ec492410b5"
+      url "https://github.com/zwasm/zwasm/releases/download/v2.6.0/zwasm-linux-x86_64.tar.gz"
+      sha256 "381a4eab574c4a0ca4ed0b6517884858c4143bc6cb184245390c9928a7deb76b"
     end
     on_arm do
-      url "https://github.com/zwasm/zwasm/releases/download/v2.5.0/zwasm-linux-aarch64.tar.gz"
-      sha256 "4afc3f45ac7b9386246df8158ae45757cf0dd0191a40b01c24448076d8918796"
+      url "https://github.com/zwasm/zwasm/releases/download/v2.6.0/zwasm-linux-aarch64.tar.gz"
+      sha256 "6ce60532026889eeafb0af0b90ba0ef140a3973fafe88142402efa85c6bd29e3"
     end
   end
 
